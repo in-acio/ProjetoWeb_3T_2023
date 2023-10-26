@@ -1,5 +1,7 @@
 # Projeto Final de Programação 3
 
+### Nome: Inácio Silva do Amaral
+
 ### Definição
 Em grupos formados por até 4 pessoas, vocês devem desenvolver um sistema que, de alguma forma, será um clone do Tinder. Porém, o que será avaliado pelas pessoas que o utilizarão será de escolha dos grupos. Algumas sugestões são jogos, séries, filmes, artistas, etc. De forma objetiva, o sistema deve apresentar para pessoas logadas itens que devem ser classificados e a classificação deve gerar um ranking.
 
