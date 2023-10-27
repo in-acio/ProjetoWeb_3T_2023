@@ -11,7 +11,7 @@ html, body {
 body {
     background-color: #0d1321;
     color: white;
-    font-family: "Roboto", Georgia, 'Times New Roman', Times, serif;    
+    font-family: "Roboto", Georgia, 'Times New Roman', Times, serif;
 }
 
 #app {
@@ -26,4 +26,32 @@ body {
     align-items: center;
     flex-direction: column;
     height: 100%;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+}
+
+input {
+    outline: none;
+    border: 1px solid black;
+    width: 20%;
+    padding: 0.6rem;
+    border-radius: 0.2rem;
+}
+
+button {
+    cursor: pointer;
+    width: 10%;
+    padding: 0.4rem;
+    background-color: #41ead4;
+    font-weight: bold;
+    outline: none;
+    border: 1px solid black;
+    border-radius: 0.2rem;
 }

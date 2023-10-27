@@ -1,0 +1,17 @@
+user
+    id
+    name
+    email
+    password
+    isAdmin
+
+item
+    id
+    name
+    img
+
+vote
+    id
+    user_id
+    item_id
+    value

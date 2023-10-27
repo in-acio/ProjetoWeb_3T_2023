@@ -1,11 +1,10 @@
 <template>
     <header>
-        <h2>NOME</h2>
+        <router-link to="/">NOME</router-link>
 
         <div class="links">
-            <p>Jogar</p>
-            <p>Rankings</p>
-            <p>Login</p>
+            <router-link to="/play">Jogar</router-link>
+            <router-link to="/rankings">Rankings</router-link>
         </div>
     </header>
 </template>
@@ -26,5 +25,12 @@
         display: flex;
         gap: 1rem;
         font-weight: 300;
+    }
+
+    a {
+        font-size: 1.2rem;
+        text-decoration: none;
+        color: white;
+        font-weight: 500;
     }
 </style>
