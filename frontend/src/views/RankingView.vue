@@ -297,17 +297,18 @@
 <style scoped>
     .rankingContainer {
         display: flex;
-        gap: 2rem;
         justify-content: space-around;
         align-items: flex-start;
         flex-wrap: wrap;
         height: 100%;
         width: 100%;
         margin-top: 5rem;
+        padding: 2rem;
     }
 
     .rankingBox {
         text-align: center;
+        margin-bottom: 2rem;
     }
 
     table {

@@ -1,7 +1,7 @@
 <template>
         <div v-for="(item, idx) in arr">
             <div v-motion-pop v-if="currentId == idx">
-                <img :src="item.img" alt="">
+                <img class="img" :src="`http://localhost:8080/images/${item.img}`" alt="">
 
                 <div class="buttons">
                     <button class="btnNo">
@@ -26,25 +26,19 @@
 </template>
 
 <script>
+import { makeRequest } from '../utils/api';
+
 export default {
     data() {
         return {
             currentId: 0,
-            arr: [
-                {
-                    img: "https://cbissn.ibict.br/images/phocagallery/galeria2/thumbs/phoca_thumb_l_image03_grd.png",
-                },
-                {
-                    img: "https://proex.ufpa.br/images/galeria_em_artigos/image04_grd.png",
-                },
-                {
-                    img: "https://cbissn.ibict.br/images/phocagallery/galeria2/thumbs/phoca_thumb_l_image03_grd.png",
-                },
-                {
-                    img: "https://cbissn.ibict.br/images/phocagallery/galeria2/thumbs/phoca_thumb_l_image03_grd.png",
-                },
-            ],
+            arr: [],
         };
+    },
+
+    async mounted(){
+       let itens = await makeRequest("itens", this.$store.state.token);
+       itens.forEach(i => this.arr.push({ name: i.name, img: i.img }));
     },
 };
 </script>
@@ -107,5 +101,9 @@ i {
     color: white;
 }
 
+.img {
+    width: 40rem;
+    height: 30rem;
+}
 
 </style>

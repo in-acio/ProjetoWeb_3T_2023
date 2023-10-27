@@ -9,6 +9,7 @@ import HistoryView from '../views/HistoryView.vue';
 import AdminPanel from '../views/AdminPanel.vue';
 import AddItemView from '../views/AddItemView.vue';
 import EditItemView from '../views/EditItemView.vue';
+import store from '../store';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -17,16 +18,25 @@ const router = createRouter({
       path: '/',
       name: 'login',
       component: LoginView,
+      meta: {
+        requiresGuest: true,
+      },
     },
     {
       path: '/register',
       name: 'register',
       component: RegisterView,
+      meta: {
+        requiresGuest: true,
+      },
     },
     {
       path: '/play',
       name: 'play',
       component: PlayView,
+      meta: {
+        requiresAuth: true,
+      },
     },
     {
       path: '/rankings',
@@ -37,14 +47,24 @@ const router = createRouter({
       path: '/profile',
       name: 'profile',
       component: ProfileView,
+      meta: {
+        requiresAuth: true,
+      },
     },
     {
       path: '/history',
       name: 'history',
       component: HistoryView,
+      meta: {
+        requiresAuth: true,
+      },
     },
     {
       path: '/admin',
+      meta: {
+        requiresAuth: true,
+        requiresAdmin: true,
+      },
       children: [
         {
           path: '',
@@ -65,18 +85,22 @@ const router = createRouter({
   ]
 })
 
-/*
 router.beforeEach((to, from, next) => {
-  if(to.matched.some(record => record.meta.requiresAuth)){
-    if(store.state.token){
-      next();
-      return;
-    }
-    next('/');
+  const requiresAuth = to.matched.some((x) => x.meta.requiresAuth);
+  const requiresGuest = to.matched.some((x) => x.meta.requiresGuest);
+  const requiresAdmin = to.matched.some((x) => x.meta.requiresAdmin);
+
+  const isLoggedin = store.state.token;
+
+  if (requiresAuth && !isLoggedin) {
+    next("/");
+  } else if (requiresGuest && isLoggedin) {
+    next("/play");
+  } else if (requiresAdmin && !store.state.isAdmin) {
+    next("/");
   } else {
     next();
   }
-})
-*/
+});
 
 export default router

@@ -6,6 +6,12 @@ type CreateUserInput struct {
 	Password string `json:"password"`
 }
 
+type UpdateUserInput struct {
+	Name        string `json:"name"`
+	OldPassword string `json:"old_password"`
+	NewPassword string `json:"new_password"`
+}
+
 type LoginInput struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`

@@ -4,7 +4,9 @@ import "backend/internal/entity"
 
 type UserInterface interface {
 	Create(user *entity.User) error
+	FindById(id uint) (*entity.User, error)
 	FindByEmail(email string) (*entity.User, error)
+	Update(user *entity.User) error
 }
 
 type ItemInterface interface {

@@ -36,19 +36,22 @@ func (h *VoteHandler) Create(w http.ResponseWriter, r *http.Request){
 
 	userId := claims["userId"].(float64)
 
-
 	vote := entity.NewVote(uint(userId), voteData.ItemId, voteData.Value)
 
-	_, err = h.VoteDB.FindByIds(uint(userId), vote.ItemID)
+	voteExists, err := h.VoteDB.FindByIds(uint(userId), vote.ItemID)
 	if err == nil {
-		handleBadRequest(w, "você já votou neste item")
-		return
-	}
-
-	err = h.VoteDB.Create(vote)
-	if err != nil {
-		handleBadRequest(w, err.Error())
-		return
+		voteExists.Value = voteData.Value;
+		err = h.VoteDB.Update(voteExists)
+		if err != nil {
+			handleBadRequest(w, err.Error())
+			return
+		}
+	} else {
+		err = h.VoteDB.Create(vote)
+		if err != nil {
+			handleBadRequest(w, err.Error())
+			return
+		}
 	}
 
 	w.WriteHeader(http.StatusOK)

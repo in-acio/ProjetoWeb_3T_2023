@@ -9,8 +9,9 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
+	"github.com/go-chi/cors"
 	"github.com/go-chi/jwtauth"
-	"gorm.io/driver/sqlite"
+	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
@@ -25,8 +26,15 @@ func main() {
 		JWTExpiresIn: 3600,
 	};
 
-	db, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
-	if err != nil {
+	db, err := gorm.Open(mysql.New(mysql.Config{
+		DSN: "root:@tcp(127.0.0.1:3306)/prog3?charset=utf8&parseTime=True&loc=Local", // data source name
+		DefaultStringSize: 256, // default size for string fields
+		DisableDatetimePrecision: true, // disable datetime precision, which not supported before MySQL 5.6
+		DontSupportRenameIndex: true, // drop & create when rename index, rename index not supported before MySQL 5.7, MariaDB
+		DontSupportRenameColumn: true, // `change` when rename column, rename column not supported before MySQL 8, MariaDB
+		SkipInitializeWithVersion: false, // auto configure based on currently MySQL version
+	  }), &gorm.Config{})
+	  if err != nil {
 		panic(err)
 	}
 
@@ -35,6 +43,15 @@ func main() {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
+
+	r.Use(cors.Handler(cors.Options{
+		AllowedOrigins:   []string{"https://*", "http://*"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
+		ExposedHeaders:   []string{"Link"},
+		AllowCredentials: false,
+		MaxAge:           300,
+	  }))
 	
 	userDB := database.NewUserDB(db)
 	userHandler := handlers.NewUserHandler(userDB, cfg.TokenAuth, cfg.JWTExpiresIn)
@@ -47,8 +64,18 @@ func main() {
 
 	FileServer(r, "/images", http.Dir("./internal/webserver/images"))
 
-	r.Post("/users", userHandler.Create)
-	r.Post("/users/login", userHandler.GetJWT)
+	r.Route("/users", func(r chi.Router){
+		r.Post("/", userHandler.Create)
+		r.Post("/login", userHandler.GetJWT)
+
+		r.Group(func (r chi.Router){
+			r.Use(jwtauth.Verifier(cfg.TokenAuth))
+			r.Use(jwtauth.Authenticator)
+			r.Get("/session", userHandler.Show)
+			r.Put("/", userHandler.Update)
+		})
+	})
+	
 
 	r.Route("/itens", func(r chi.Router){
 		r.Use(jwtauth.Verifier(cfg.TokenAuth))

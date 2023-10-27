@@ -32,6 +32,7 @@ func (h *ItemHandler) Create(w http.ResponseWriter, r *http.Request) {
         handleBadRequest(w, err.Error())
         return
     }
+
     defer file.Close()
 
     imgName := uniuri.NewLen(30) + filepath.Ext(handler.Filename)
