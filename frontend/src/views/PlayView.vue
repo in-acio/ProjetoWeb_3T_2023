@@ -4,15 +4,15 @@
                 <img class="img" :src="`http://localhost:8080/images/${item.img}`" alt="">
 
                 <div class="buttons">
-                    <button class="btnNo">
+                    <button @click="vote(0)" class="btnNo">
                         <i class='bx bx-x'></i>
                     </button>
 
-                    <button class="btnMeh">
+                    <button @click="vote(1)" class="btnMeh">
                         <i class='bx bx-meh'></i>
                     </button>
 
-                    <button @click="currentId++" class="btnYes">
+                    <button @click="vote(2)" class="btnYes">
                         <i class='bx bx-check'></i>
                     </button>
                 </div>  
@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { makeRequest } from '../utils/api';
+import { POST_REQUEST, makeRequest } from '../utils/api';
 
 export default {
     data() {
@@ -36,9 +36,18 @@ export default {
         };
     },
 
+    methods: {
+        async vote(value){
+            const data = POST_REQUEST('vote', 'POST', this.$store.state.token, { item_id: this.arr[this.currentId].id, value: value });
+            const req = await fetch(data.url, data.options);
+
+            this.currentId++;
+        }
+    },
+
     async mounted(){
        let itens = await makeRequest("itens", this.$store.state.token);
-       itens.forEach(i => this.arr.push({ name: i.name, img: i.img }));
+       itens.forEach(i => this.arr.push({ id: i.id, name: i.name, img: i.img }));
     },
 };
 </script>

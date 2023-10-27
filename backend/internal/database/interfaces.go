@@ -12,7 +12,8 @@ type UserInterface interface {
 type ItemInterface interface {
 	Create(item *entity.Item) error
 	FindById(id uint) (*entity.Item, error)
-	FindAll() ([]entity.Item, error) 
+	FindAll(page, limit int, sort string) ([]entity.Item, error)
+	GetRanking() ([][]TopItem, error)
 	Update(item *entity.Item) error
 	Delete(id uint) error
 }

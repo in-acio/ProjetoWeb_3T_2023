@@ -1,10 +1,11 @@
 <template>
 
     <div class="rankingContainer">
-        <div class="rankingBox">
-            <h1>Mais gostados</h1>
+        <div v-for="(rank,idx) in ranking" class="rankingBox">
+            <h1>{{ title[idx] }}</h1>
+            <button @click="reorder(idx)">Inverter</button>
 
-            <table>
+            <table v-if="ranking">
                 <thead>
                     <tr>
                         <th>Lugar</th>
@@ -13,279 +14,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Teste</td>
-                        <td>20</td>
-                    </tr>
-
-                    <tr>
-                        <td>1</td>
-                        <td>Teste</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Teste</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Teste</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Teste</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Teste</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Teste</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Teste</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Teste</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Teste</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Teste</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Teste</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Teste</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Teste</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Teste</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Teste</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Teste</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Teste</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Teste</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Teste</td>
-                        <td>20</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="rankingBox">
-            <h1>Mais gostados</h1>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>Lugar</th>
-                        <th>Nome</th>
-                        <th>Votos</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Teste</td>
-                        <td>20</td>
-                    </tr>
-
-                    <tr>
-                        <td>1</td>
-                        <td>Teste</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Teste</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Teste</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Teste</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Teste</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Teste</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Teste</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Teste</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Teste</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Teste</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Teste</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Teste</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Teste</td>
-                        <td>20</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="rankingBox">
-            <h1>Mais gostados</h1>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>Lugar</th>
-                        <th>Nome</th>
-                        <th>Votos</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Teste</td>
-                        <td>20</td>
-                    </tr>
-
-                    <tr>
-                        <td>1</td>
-                        <td>Teste</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Teste</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Teste</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Teste</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Teste</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Teste</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Testdsadsadsadsadase</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Teste</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Teste</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Teste</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Teste</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Teste</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Teste</td>
-                        <td>20</td>
+                    <tr v-for="(item,idx) in rank">
+                        <td>{{idx+1}}</td>
+                        <td>{{item.name}}</td>
+                        <td>{{item.vote_count}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -293,6 +25,33 @@
     </div>
 
 </template>
+
+<script>
+import { GET_REQUEST } from '../utils/api';
+
+export default{
+    data(){
+        return {
+            ranking: null,
+            title: ['Menos queridos', 'Mais neutros', 'Mais queridos'],
+        };
+    },
+
+    async mounted(){
+        const data = GET_REQUEST("itens/ranking", "");
+        const req = await fetch(data.url, data.options);
+        const json = await req.json();
+
+        this.ranking = json;
+    },
+
+    methods: {
+        reorder(idx){
+            this.ranking[idx] = this.ranking[idx].reverse();
+        },
+    },
+};
+</script>
 
 <style scoped>
     .rankingContainer {
@@ -309,6 +68,11 @@
     .rankingBox {
         text-align: center;
         margin-bottom: 2rem;
+    }
+
+    button {
+        width: 50%;
+        padding: 0.2rem;
     }
 
     table {

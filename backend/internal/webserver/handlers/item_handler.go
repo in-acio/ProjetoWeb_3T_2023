@@ -67,7 +67,7 @@ func (h *ItemHandler) List(w http.ResponseWriter, r *http.Request){
     _, claims, _ := jwtauth.FromContext(r.Context())
     fmt.Println(claims["userId"])
 
-    p, err := h.ItemDB.FindAll()
+    p, err := h.ItemDB.FindAll(0, 0, "")
     
     if err != nil {
         handleBadRequest(w, err.Error())
@@ -77,5 +77,15 @@ func (h *ItemHandler) List(w http.ResponseWriter, r *http.Request){
 	w.Header().Set("Content-Type", "application/json")
     w.WriteHeader(http.StatusOK)
     json.NewEncoder(w).Encode(&p)
+}
 
+func (h *ItemHandler) Ranking(w http.ResponseWriter, r *http.Request){
+    items, err := h.ItemDB.GetRanking();
+    if err != nil {
+        handleBadRequest(w, err.Error())
+        return
+    }
+
+    w.WriteHeader(http.StatusOK)
+    json.NewEncoder(w).Encode(&items);
 }

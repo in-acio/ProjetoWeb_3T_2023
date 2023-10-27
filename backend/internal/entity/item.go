@@ -5,7 +5,8 @@ import (
 )
 
 type Item struct {
-	gorm.Model
+	gorm.Model `json:"-"`
+	ID       uint   `json:"id"`
 	Name     string `json:"name"`
 	Img	string `json:"img"`
 	Users []*User `gorm:"many2many:votes;"`

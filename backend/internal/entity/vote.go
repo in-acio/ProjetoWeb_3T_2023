@@ -3,7 +3,8 @@ package entity
 import "gorm.io/gorm"
 
 type Vote struct {
-	gorm.Model
+	gorm.Model `json:"-"`
+	ID       uint   `json:"id"`
 	UserID  uint
 	ItemID  uint
 	Value   uint

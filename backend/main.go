@@ -78,10 +78,14 @@ func main() {
 	
 
 	r.Route("/itens", func(r chi.Router){
-		r.Use(jwtauth.Verifier(cfg.TokenAuth))
-		r.Use(jwtauth.Authenticator)
-		r.Get("/", itemHandler.List)
-		r.Post("/", itemHandler.Create)
+		r.Get("/ranking", itemHandler.Ranking)
+
+		r.Group(func (r chi.Router){
+			r.Use(jwtauth.Verifier(cfg.TokenAuth))
+			r.Use(jwtauth.Authenticator)
+			r.Get("/", itemHandler.List)
+			r.Post("/", itemHandler.Create)
+		})
 	})
 
 	r.Route("/vote", func(r chi.Router){
