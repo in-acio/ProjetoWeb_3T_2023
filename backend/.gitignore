@@ -1,4 +1,0 @@
-internal/webserver/images/*
-
-# exception to the rule
-!internal/webserver/images/.gitkeep 

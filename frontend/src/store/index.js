@@ -12,7 +12,6 @@ export default createStore({
     isAdmin: null,
   },
   getters: {
-
   },
   mutations: {
     changeToken(state, newToken){
@@ -38,10 +37,12 @@ export default createStore({
       state.isAdmin = null;
       document.cookie=`token=; Path=/; Secure; SameSite=Strict`;
     },
+    
   },
   actions: {
     async checkAuth({ commit }) {
       const token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*=\s*([^;]*).*$)|^.*$/, "$1");
+      const path = window.location.pathname;
 
       if (token) {
         try {
@@ -53,7 +54,7 @@ export default createStore({
           commit('changeIsAdmin', req.isAdmin);
 
           bus.$emit("login", true);
-          router.push("/play");
+          router.push(path);
         } catch(error){
           commit('logout');
           router.push("/");

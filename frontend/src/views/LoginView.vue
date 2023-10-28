@@ -2,7 +2,7 @@
         <h2>Login</h2>
 
         <form @submit.prevent="login">
-            <input type="email" name="email" placeholder="Email" v-model="email" required>
+            <input type="text" name="email" placeholder="Email" v-model="email" required>
             <input type="password" name="password" placeholder="Senha" v-model="password" required>
 
             <button>Entrar</button>
@@ -41,10 +41,10 @@ export default {
             this.$store.commit('changeToken', json.token);
             this.$store.commit('changeEmail', json.email);
             this.$store.commit('changeUsername', json.name);
-            this.$store.commit('changeIsAdmin', json.isAdmin);
+            this.$store.commit('changeIsAdmin', json.is_admin);
             document.cookie=`token=${json.token}; Path=/; Secure; SameSite=Strict`;
 
-            this.$bus.$emit("login", true);
+            this.$bus.$emit("login", json.is_admin);
             this.$router.push('/play');
         },
     }

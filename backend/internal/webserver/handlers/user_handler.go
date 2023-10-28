@@ -99,10 +99,12 @@ func (h *UserHandler) GetJWT(w http.ResponseWriter, r *http.Request) {
 		AccessToken string `json:"token"`
 		Email string `json:"email"`
 		Name string `json:"name"`
+		IsAdmin bool `json:"is_admin"`
 	}{
 		AccessToken: tokenString,
 		Email: u.Email,
 		Name: u.Name,
+		IsAdmin: u.IsAdmin,
 	}
 
 	w.Header().Set("Content-Type", "application/json")

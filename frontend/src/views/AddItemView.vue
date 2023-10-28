@@ -19,6 +19,10 @@
 </template>
 
 <script>
+import { useToast } from 'vue-toastification';
+
+const toast = useToast();
+
 export default {
     data(){
         return {
@@ -41,8 +45,13 @@ export default {
                     'Authorization': `Bearer ${this.$store.state.token}`
                 },
             });
-            let data = await res.json();
-            console.log(data);
+            
+            if(res.status == 201) {
+                toast.success("Item adicionado!");
+                this.name = "";
+            } else {
+                toast.error("Algo deu errado!");
+            }
         },
     },
 };

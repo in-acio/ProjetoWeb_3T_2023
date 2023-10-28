@@ -29,6 +29,18 @@ export function GET_REQUEST(path, token){
      }
 };
 
+export function DELETE_REQUEST(path, token){
+    return { 
+        url: BASE_URL + path,
+        options: {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+        }
+     }
+};
+
 export function POST_REQUEST(path, method, token, body){
     return { 
         url: BASE_URL + path,

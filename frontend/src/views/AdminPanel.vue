@@ -4,7 +4,7 @@
     <div style="display: flex; flex-direction: column; height: 100%; width: 100%; text-align: center; padding: 2rem;">
         <h2 style="margin-bottom: 1rem;">Listagem - <router-link to="/admin/addItem">Adicionar novo item</router-link></h2>
 
-        <table>
+        <table v-if="items">
             <thead>
                 <tr>
                     <th>Nome</th>
@@ -14,16 +14,16 @@
             </thead>
 
             <tbody>
-                <tr v-for="i in 20">
-                    <td>Nome do item</td>
+                <tr v-for="item in items">
+                    <td>{{ item.name }}</td>
                     <td>
-                        <img src="https://prefeitura.rio/wp-content/uploads/2021/12/WhatsApp-Image-2021-12-16-at-16.42.03.jpeg" width="100" height="100" alt="">
+                        <img :src="`http://localhost:8080/images/${item.img}`" width="150" height="100" alt="">
                     </td>
 
                     <td>
                         <div class="icons">
-                            <i @click="this.$router.push({ name: 'editItem', params: { id: '123' }})" style="margin-right: 1rem;" class='bx bx-edit-alt'></i>
-                            <i class='bx bx-trash' ></i>
+                            <i @click="this.$router.push({ name: 'editItem', params: { id: item.id }})" style="margin-right: 1rem;" class='bx bx-edit-alt'></i>
+                            <i @click="deleteItem(item.id)" class='bx bx-trash'></i>
                         </div>
                     </td>
                 </tr>
@@ -33,6 +33,37 @@
         </table>
     </div>
 </template>
+
+<script>
+import { DELETE_REQUEST, makeRequest } from '../utils/api';
+
+export default{
+    data(){
+        return {
+            items: null,
+        };
+    },
+
+    methods: {
+        async deleteItem(idx) {
+            const data = DELETE_REQUEST(`itens/${idx}`, this.$store.state.token);
+            const req = await fetch(data.url, data.options);
+
+            if(!req.ok){
+                alert("ERRO");
+                return;
+            }
+
+            this.items = this.items.filter(item => item.id != idx);
+        }
+    },
+
+    async mounted(){
+       let data = await makeRequest("itens", this.$store.state.token);
+       this.items=data;
+    },
+};
+</script>
 
 <style scoped>
 

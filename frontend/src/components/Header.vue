@@ -6,19 +6,21 @@
             <router-link to="/play">Jogar</router-link>
             <router-link to="/rankings">Rankings</router-link>
             <router-link v-if="userLoggedIn" to="/profile">Perfil</router-link>
-            <router-link v-if="userLoggedIn && this.$store.state.isAdmin" to="/admin">Admin</router-link>
+            <router-link v-if="userLoggedIn && isAdmin" to="/admin">Admin</router-link>
             <a style="cursor: pointer;" v-if="userLoggedIn" @click.prevent="logout">Logout</a>
         </div>
     </header>
 </template>
 
 <script>
+
 export default {
     inject: ['$bus'],
 
    data(){
         return {
             userLoggedIn: false,
+            isAdmin: false,
         };
    },
 
@@ -30,7 +32,10 @@ export default {
    },
 
    created(){
-        this.$bus.$on('login', (v) => this.userLoggedIn=v);
+        this.$bus.$on('login', (v) => {
+            this.userLoggedIn=true;
+            this.isAdmin=v;
+        });
    },
 };
 </script>

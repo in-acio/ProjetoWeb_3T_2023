@@ -29,16 +29,32 @@ export default {
 
     methods: {
         async register(){
-            const data = USER("", {name: this.name, email: this.email, password: this.password})
-            const req = await fetch(data.url, data.options);
-            const json = await req.json();
+            let data = USER("", {name: this.name, email: this.email, password: this.password})
+            let req = await fetch(data.url, data.options);
+            let json = await req.json();
 
             if(!req.ok){
                 toast.error(json.error);
                 return;
             }
 
+            data = USER("/login", {email: this.email, password: this.password})
+            req = await fetch(data.url, data.options);
+            json = await req.json();
+
+            if(!req.ok){
+                toast.error(json.error);
+                return;
+            }
             
+            this.$store.commit('changeToken', json.token);
+            this.$store.commit('changeEmail', json.email);
+            this.$store.commit('changeUsername', json.name);
+            this.$store.commit('changeIsAdmin', json.isAdmin);
+            document.cookie=`token=${json.token}; Path=/; Secure; SameSite=Strict`;
+
+            this.$bus.$emit("login", true);
+            this.$router.push('/play');
         },
     }
 };

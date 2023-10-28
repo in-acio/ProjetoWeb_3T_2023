@@ -80,11 +80,20 @@ func main() {
 	r.Route("/itens", func(r chi.Router){
 		r.Get("/ranking", itemHandler.Ranking)
 
+		r.Group(func(r chi.Router){
+			r.Use(jwtauth.Verifier(cfg.TokenAuth))
+			r.Use(jwtauth.Authenticator)
+			r.Use(isAdmin)
+			r.Post("/", itemHandler.Create)
+			r.Put("/{id}", itemHandler.Update)
+			r.Delete("/{id}", itemHandler.Delete)
+		})
+
 		r.Group(func (r chi.Router){
 			r.Use(jwtauth.Verifier(cfg.TokenAuth))
 			r.Use(jwtauth.Authenticator)
 			r.Get("/", itemHandler.List)
-			r.Post("/", itemHandler.Create)
+			r.Get("/{id}", itemHandler.Show)
 		})
 	})
 
@@ -107,4 +116,17 @@ func FileServer(r chi.Router, path string, root http.FileSystem) {
 	r.Get(path+"/*", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		fs.ServeHTTP(w, r)
 	}))
+}
+
+func isAdmin(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		_, claims, _ := jwtauth.FromContext(r.Context())
+
+		if isAdminClaim, ok := claims["isAdmin"].(bool); !ok || !isAdminClaim {
+			http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
 }
