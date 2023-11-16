@@ -19,11 +19,13 @@ import (
 
 type ItemHandler struct {
 	ItemDB database.ItemInterface
+    ImagesFolder string
 }
 
-func NewItemHandler(itemDB database.ItemInterface) *ItemHandler{
+func NewItemHandler(itemDB database.ItemInterface, imgFolder string) *ItemHandler{
 	return &ItemHandler{
 		ItemDB: itemDB,
+        ImagesFolder: imgFolder,
 	}
 }
 
@@ -46,7 +48,7 @@ func (h *ItemHandler) Create(w http.ResponseWriter, r *http.Request) {
     }
 
     imgName := uniuri.NewLen(30) + fileExt
-    f, err := os.OpenFile("./internal/webserver/images/" + imgName, os.O_WRONLY|os.O_CREATE, 0666)
+    f, err := os.OpenFile(h.ImagesFolder + imgName, os.O_WRONLY|os.O_CREATE, 0666)
 
     if err != nil {
         handleBadRequest(w, err.Error())
@@ -139,7 +141,7 @@ func (h *ItemHandler) Delete(w http.ResponseWriter, r *http.Request){
         return
     }
 
-    err = os.Remove("./internal/webserver/images/" + item.Img) 
+    err = os.Remove(h.ImagesFolder + item.Img) 
     if err != nil { 
         handleBadRequest(w, err.Error())
         return
@@ -173,20 +175,21 @@ func (h *ItemHandler) Update(w http.ResponseWriter, r *http.Request){
     var imgName string
     if file != nil {
         defer file.Close()
-        
-        err = os.Remove("./internal/webserver/images/" + existingItem.Img) 
+
+        err = os.Remove(h.ImagesFolder + existingItem.Img) 
         if err != nil { 
             handleBadRequest(w, err.Error())
             return
         }
 
         imgName = uniuri.NewLen(30) + filepath.Ext(handler.Filename)
-        f, err := os.OpenFile("./internal/webserver/images/" + imgName, os.O_WRONLY|os.O_CREATE, 0666)
+        f, err := os.OpenFile(h.ImagesFolder + imgName, os.O_WRONLY|os.O_CREATE, 0666)
 
         if err != nil {
             handleBadRequest(w, err.Error())
             return
         }
+        defer f.Close()
 
         _, err = io.Copy(f, file)
         if err != nil {

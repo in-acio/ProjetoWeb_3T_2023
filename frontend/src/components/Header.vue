@@ -1,6 +1,6 @@
 <template>
     <header>
-        <router-link to="/">NOME</router-link>
+        <router-link to="/">Animal Rater</router-link>
 
         <div class="links">
             <router-link to="/play">Jogar</router-link>

@@ -14,6 +14,7 @@ type conf struct {
 	WebServerPort string `mapstructure:"WEB_SERVER_PORT"`
 	JWTSecret     string `mapstructure:"JWT_SECRET"`
 	JWTExpiresIn  int 	 `mapstructure:"JWT_EXPIRESIN"`
+	ImagesFolder string `mapstructure:"IMAGES_FOLDER"`
 	TokenAuth *jwtauth.JWTAuth
 }
 

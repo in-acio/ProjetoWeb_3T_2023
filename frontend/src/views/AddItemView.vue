@@ -6,7 +6,7 @@
     <form @submit.prevent="saveItem">
         <div>
             <label for="name">Nome</label>
-            <input v-model="name" id="name" type="text" name="name" placeholder="Nome do item">
+            <input v-model="name" required id="name" type="text" name="name" placeholder="Nome do item">
         </div>
 
         <div>
@@ -38,18 +38,23 @@ export default {
             }
             dataForm.append("name", this.name);
 
-            let res = await fetch(`http://localhost:8080/itens`, {
-                method: 'POST',
-                body: dataForm,
-                headers: {
-                    'Authorization': `Bearer ${this.$store.state.token}`
-                },
-            });
-            
-            if(res.status == 201) {
-                toast.success("Item adicionado!");
-                this.name = "";
-            } else {
+            try {
+                let res = await fetch(`http://localhost:8080/itens`, {
+                    method: 'POST',
+                    body: dataForm,
+                    headers: {
+                        'Authorization': `Bearer ${this.$store.state.token}`
+                    },
+                });
+                
+                if(res.status == 201) {
+                    toast.success("Item adicionado!");
+                    this.name = "";
+                } else {
+                    const json = await res.json();
+                    toast.error(json.error);
+                }
+            } catch(err) {
                 toast.error("Erro!");
             }
         },

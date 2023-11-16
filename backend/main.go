@@ -54,12 +54,12 @@ func main() {
 	userHandler := handlers.NewUserHandler(userDB, cfg.TokenAuth, cfg.JWTExpiresIn)
 
 	itemDB := database.NewItemDB(db)
-	itemHandler := handlers.NewItemHandler(itemDB)
+	itemHandler := handlers.NewItemHandler(itemDB, cfg.ImagesFolder)
 
 	voteDB := database.NewVoteDB(db)
 	voteHandler := handlers.NewVoteHandler(voteDB)
 
-	FileServer(r, "/images", http.Dir("./internal/webserver/images"))
+	FileServer(r, "/images", http.Dir(cfg.ImagesFolder))
 
 	r.Route("/users", func(r chi.Router){
 		r.Post("/", userHandler.Create)
