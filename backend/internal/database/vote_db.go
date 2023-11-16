@@ -10,6 +10,11 @@ type VoteDB struct {
 	DB *gorm.DB
 }
 
+type VoteWithItem struct {
+	entity.Vote
+    entity.Item
+}
+
 func NewVoteDB(db *gorm.DB) *VoteDB {
 	return &VoteDB{
 		DB: db,
@@ -42,6 +47,13 @@ func (v *VoteDB) FindById(id uint) (*entity.Vote, error) {
 	return &vote, nil
 }
 
+func (v *VoteDB) FindByUserId(id uint) ([]VoteWithItem, error) {
+	var votes []VoteWithItem
+
+	err := v.DB.Table("votes").Select("*").Joins("JOIN items ON items.id = votes.item_id").Where("votes.user_id = ?", id).Find(&votes).Error
+
+	return votes, err
+}
 
 func (v *VoteDB) Update(vote *entity.Vote) error {
 	_, err := v.FindById(vote.ID)

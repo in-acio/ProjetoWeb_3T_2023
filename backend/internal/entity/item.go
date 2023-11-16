@@ -9,7 +9,7 @@ type Item struct {
 	ID       uint   `json:"id"`
 	Name     string `json:"name"`
 	Img	string `json:"img"`
-	Users []*User `gorm:"many2many:votes;"`
+	Users []*User `gorm:"many2many:votes;" json:"-"`
 }
 
 func NewItem(name, img string) *Item {

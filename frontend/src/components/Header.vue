@@ -5,6 +5,7 @@
         <div class="links">
             <router-link to="/play">Jogar</router-link>
             <router-link to="/rankings">Rankings</router-link>
+            <router-link v-if="userLoggedIn" to="/history">Histórico</router-link>
             <router-link v-if="userLoggedIn" to="/profile">Perfil</router-link>
             <router-link v-if="userLoggedIn && isAdmin" to="/admin">Admin</router-link>
             <a style="cursor: pointer;" v-if="userLoggedIn" @click.prevent="logout">Logout</a>

@@ -10,6 +10,7 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
 
 	"github.com/dchest/uniuri"
 	"github.com/go-chi/chi"
@@ -37,13 +38,22 @@ func (h *ItemHandler) Create(w http.ResponseWriter, r *http.Request) {
 
     defer file.Close()
 
-    imgName := uniuri.NewLen(30) + filepath.Ext(handler.Filename)
+    fileExt := strings.ToLower(filepath.Ext(handler.Filename))
+
+    if fileExt != ".png" && fileExt != ".jpg" && fileExt != ".jpeg" {
+        handleBadRequest(w, "A imagem escolhida não é válida")
+        return
+    }
+
+    imgName := uniuri.NewLen(30) + fileExt
     f, err := os.OpenFile("./internal/webserver/images/" + imgName, os.O_WRONLY|os.O_CREATE, 0666)
 
     if err != nil {
         handleBadRequest(w, err.Error())
         return
     }
+    defer f.Close()
+
 
     _, err = io.Copy(f, file)
     if err != nil {

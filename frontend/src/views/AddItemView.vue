@@ -11,7 +11,7 @@
 
         <div>
             <label for="img">Imagem</label>
-            <input ref="file" id="img" type="file" name="file">
+            <input ref="file" id="img" type="file" name="file" required accept="image/*">
         </div>
 
         <button>Salvar</button>
@@ -50,7 +50,7 @@ export default {
                 toast.success("Item adicionado!");
                 this.name = "";
             } else {
-                toast.error("Algo deu errado!");
+                toast.error("Erro!");
             }
         },
     },

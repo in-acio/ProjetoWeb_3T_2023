@@ -5,6 +5,7 @@ import (
 	"backend/internal/dto"
 	"backend/internal/entity"
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/go-chi/jwtauth"
@@ -55,4 +56,26 @@ func (h *VoteHandler) Create(w http.ResponseWriter, r *http.Request){
 	}
 
 	w.WriteHeader(http.StatusOK)
+}
+
+func (h *VoteHandler) List(w http.ResponseWriter, r *http.Request) {
+	_, claims, err := jwtauth.FromContext(r.Context())
+	if err != nil {
+		handleBadRequest(w, err.Error())
+		return 
+	}
+
+	userId := uint(claims["userId"].(float64))
+
+	votes, err := h.VoteDB.FindByUserId(userId)
+	if err != nil {
+		handleBadRequest(w, err.Error())
+		return
+	}
+
+	fmt.Println(votes)
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(votes)
 }

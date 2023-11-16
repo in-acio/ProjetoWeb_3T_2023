@@ -85,6 +85,11 @@ func (i *ItemDB) Update(item *entity.Item) error {
 }
 
 func (i *ItemDB) Delete(id uint) error {
+	err := i.DB.Unscoped().Exec("DELETE FROM votes WHERE item_id = ?", id).Error
+	if err != nil {
+		return err
+	}
+	
 	item, err := i.FindById(id)
 	if err != nil {
 		return err

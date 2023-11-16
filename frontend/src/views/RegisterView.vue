@@ -19,6 +19,8 @@ import { USER } from '../utils/api';
 const toast = useToast();
 
 export default {
+    inject: ['$bus'],
+
     data(){
         return {
             name: "",
@@ -29,32 +31,44 @@ export default {
 
     methods: {
         async register(){
+            let json = { error: "Algo deu errado" };
             let data = USER("", {name: this.name, email: this.email, password: this.password})
             let req = await fetch(data.url, data.options);
-            let json = await req.json();
-
-            if(!req.ok){
-                toast.error(json.error);
-                return;
-            }
-
-            data = USER("/login", {email: this.email, password: this.password})
-            req = await fetch(data.url, data.options);
-            json = await req.json();
-
-            if(!req.ok){
-                toast.error(json.error);
-                return;
-            }
             
-            this.$store.commit('changeToken', json.token);
-            this.$store.commit('changeEmail', json.email);
-            this.$store.commit('changeUsername', json.name);
-            this.$store.commit('changeIsAdmin', json.isAdmin);
-            document.cookie=`token=${json.token}; Path=/; Secure; SameSite=Strict`;
+            try {
+                json = await req.json();
+            } catch(err){
+                console.log(err);
+            }
 
-            this.$bus.$emit("login", true);
-            this.$router.push('/play');
+            if(!req.ok){
+                toast.error(json.error);
+                return;
+            }
+
+            try {
+                data = USER("/login", { email: this.email, password: this.password })
+                req = await fetch(data.url, data.options);
+                json = await req.json();
+
+                if(!req.ok){
+                toast.error("Algo deu errado");
+                    return;
+                }
+                
+                this.$store.commit('changeToken', json.token);
+                this.$store.commit('changeEmail', json.email);
+                this.$store.commit('changeUsername', json.name);
+                this.$store.commit('changeIsAdmin', json.is_admin);
+                document.cookie=`token=${json.token}; Path=/; Secure; SameSite=Strict`;
+
+                this.$bus.$emit("login", true);
+                this.$router.push('/play');
+            } catch(err){
+                    console.log(err);
+            }
+
+            
         },
     }
 };

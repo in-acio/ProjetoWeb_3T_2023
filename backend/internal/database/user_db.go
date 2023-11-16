@@ -36,6 +36,15 @@ func (u *UserDB) FindByEmail(email string) (*entity.User, error) {
 	return &user, nil
 }
 
+func (u *UserDB) FindByName(name string) (*entity.User, error) {
+	var user entity.User
+	if err := u.DB.Where("name = ?", name).First(&user).Error; err != nil {
+		return nil, err
+	}
+
+	return &user, nil
+}
+
 func (u *UserDB) Update(user *entity.User) error {
 	_, err := u.FindByEmail(user.Email)
 	if err != nil {

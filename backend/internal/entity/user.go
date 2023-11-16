@@ -23,7 +23,7 @@ type User struct {
 	Email    string `json:"email"`
 	Password string `json:"-"`
 	IsAdmin bool `json:"isAdmin"`
-	Items []Item `gorm:"many2many:votes;"`
+	Items []*Item `gorm:"many2many:votes;"`
 }
 
 func NewUser(name, email, password string) (*User, error) { 

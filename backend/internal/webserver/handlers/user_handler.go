@@ -74,7 +74,7 @@ func (h *UserHandler) GetJWT(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	u, err := h.UserDB.FindByEmail(loginData.Email)
+	u, err := h.UserDB.FindByName(loginData.Email)
 	if err != nil {
 		handleBadRequest(w, "usuário não encontrado")
 		return

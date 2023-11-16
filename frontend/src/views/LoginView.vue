@@ -2,7 +2,7 @@
         <h2>Login</h2>
 
         <form @submit.prevent="login">
-            <input type="text" name="email" placeholder="Email" v-model="email" required>
+            <input type="text" name="email" placeholder="Nome" v-model="email" required>
             <input type="password" name="password" placeholder="Senha" v-model="password" required>
 
             <button>Entrar</button>

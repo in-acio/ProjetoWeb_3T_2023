@@ -1,9 +1,11 @@
 package main
 
 import (
+	"backend/configs"
 	"backend/internal/database"
 	"backend/internal/entity"
 	"backend/internal/webserver/handlers"
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -15,24 +17,19 @@ import (
 	"gorm.io/gorm"
 )
 
-type cfgs struct {
-	JWTExpiresIn  int 
-	TokenAuth *jwtauth.JWTAuth
-};
-
 func main() {
-	cfg := cfgs{
-		TokenAuth: jwtauth.New("HS256", []byte("teste123"), nil),
-		JWTExpiresIn: 3600,
-	};
+	cfg, err := configs.LoadConfig(".")
+	if err != nil {
+		panic(err)
+	}
 
 	db, err := gorm.Open(mysql.New(mysql.Config{
-		DSN: "root:@tcp(127.0.0.1:3306)/prog3?charset=utf8&parseTime=True&loc=Local", // data source name
-		DefaultStringSize: 256, // default size for string fields
-		DisableDatetimePrecision: true, // disable datetime precision, which not supported before MySQL 5.6
-		DontSupportRenameIndex: true, // drop & create when rename index, rename index not supported before MySQL 5.7, MariaDB
-		DontSupportRenameColumn: true, // `change` when rename column, rename column not supported before MySQL 8, MariaDB
-		SkipInitializeWithVersion: false, // auto configure based on currently MySQL version
+		DSN: fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local", cfg.DBUser, cfg.DBPassword, cfg.DBHost, cfg.DBPort, cfg.DBName),
+		DefaultStringSize: 256,
+		DisableDatetimePrecision: true,
+		DontSupportRenameIndex: true,
+		DontSupportRenameColumn: true,
+		SkipInitializeWithVersion: false,
 	  }), &gorm.Config{})
 	  if err != nil {
 		panic(err)
@@ -101,9 +98,10 @@ func main() {
 		r.Use(jwtauth.Verifier(cfg.TokenAuth))
 		r.Use(jwtauth.Authenticator)
 		r.Post("/", voteHandler.Create)
+		r.Get("/", voteHandler.List)
 	})
 
-	http.ListenAndServe(":8080", r)
+	http.ListenAndServe(fmt.Sprintf(":%s", cfg.WebServerPort), r)
 }
 
 func FileServer(r chi.Router, path string, root http.FileSystem) {
