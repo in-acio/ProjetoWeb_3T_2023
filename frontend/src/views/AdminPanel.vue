@@ -1,10 +1,10 @@
 <template>
     <h1>Admin</h1>
 
-    <div style="display: flex; flex-direction: column; height: 100%; width: 100%; text-align: center; padding: 2rem;">
+    <div style="display: flex; flex-direction: column; text-align: center; height: 100%; width: 100%;">
         <h2 style="margin-bottom: 1rem;">Listagem - <router-link to="/admin/addItem">Adicionar novo item</router-link></h2>
 
-        <table v-if="items">
+        <table style="margin: 0 auto;" v-if="items">
             <thead>
                 <tr>
                     <th>Nome</th>
@@ -70,6 +70,10 @@ export default{
 table {
   border-collapse:separate; 
   border-spacing: 0 1em;
+}
+
+tr, td {
+    padding: 1rem 3rem;
 }
 
 .icons {
