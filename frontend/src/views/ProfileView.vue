@@ -44,18 +44,21 @@ export default {
 
     methods: {
         async updateProfile(){
-            const data = POST_REQUEST("users", "PUT", this.$store.state.token, {name: this.name, old_password: this.oldPass, new_password: this.newPass });
-            const req = await fetch(data.url, data.options);
-            const json = await req.json();
+            try {
+                const data = POST_REQUEST("users", "PUT", this.$store.state.token, {name: this.name, old_password: this.oldPass, new_password: this.newPass });
+                const req = await fetch(data.url, data.options);
+                const json = await req.json();
 
-            if(!req.ok){
-                toast.error("Algo deu errado!");
-                return;
+                if(!req.ok){
+                    toast.error("Algo deu errado!");
+                    return;
+                }
+
+                this.$store.commit('changeUsername', json.name);
+                toast.success("Dados alterados com sucesso!");
+            } catch(err) {
+                toast.error("O campo senha antiga está incorreto");
             }
-
-            this.$store.commit('changeUsername', json.name);
-            toast.success("Dados alterados com sucesso!");
-
         },
     }
 };

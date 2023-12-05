@@ -47,7 +47,7 @@ export default {
             }
 
             try {
-                data = USER("/login", { email: this.email, password: this.password })
+                data = USER("/login", { email: this.name, password: this.password })
                 req = await fetch(data.url, data.options);
                 json = await req.json();
 
@@ -62,7 +62,7 @@ export default {
                 this.$store.commit('changeIsAdmin', json.is_admin);
                 document.cookie=`token=${json.token}; Path=/; Secure; SameSite=Strict`;
 
-                this.$bus.$emit("login", true);
+                this.$bus.$emit("login", json.is_admin);
                 this.$router.push('/play');
             } catch(err){
                     console.log(err);
